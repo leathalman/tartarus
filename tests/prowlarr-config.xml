@@ -1,0 +1,17 @@
+<Config>
+  <ApiKey>tartarus-test-api-key</ApiKey>
+  <LogLevel>info</LogLevel>
+  <UrlBase></UrlBase>
+  <Branch>master</Branch>
+  <AuthenticationMethod>None</AuthenticationMethod>
+  <Port>9696</Port>
+  <BindAddress>*</BindAddress>
+  <SslPort>6969</SslPort>
+  <EnableSsl>False</EnableSsl>
+  <LaunchBrowser>True</LaunchBrowser>
+  <AuthenticationRequired>Enabled</AuthenticationRequired>
+  <SslCertPath></SslCertPath>
+  <SslCertPassword></SslCertPassword>
+  <InstanceName>Prowlarr</InstanceName>
+  <UpdateMechanism>Docker</UpdateMechanism>
+</Config>
