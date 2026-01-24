@@ -1,0 +1,53 @@
+services:
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: tartarus-prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./prowlarr-config.xml:/config/config.xml
+    ports:
+      - "9696:9696"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9696/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: tartarus-qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+    volumes:
+      - ./qbittorrent.conf:/config/qBittorrent/qBittorrent.conf
+      - downloads:/downloads
+    ports:
+      - "8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-o", "/dev/null", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  driver:
+    image: alpine/curl:latest
+    container_name: tartarus-driver
+    depends_on:
+      prowlarr:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_healthy
+    volumes:
+      - .:/tests
+    entrypoint: ["sh", "/tests/driver.sh"]
+
+volumes:
+  downloads:
