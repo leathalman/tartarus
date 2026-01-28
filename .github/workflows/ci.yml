@@ -66,7 +66,7 @@ jobs:
         run: npm test
 
   docker:
-    name: Docker
+    name: Build backend
     runs-on: ubuntu-latest
     permissions:
       contents: read
