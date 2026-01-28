@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
 use backend::app::{AppState, build_router};
-use backend::clients::prowlarr::RealProwlarrClient;
-use backend::clients::qbittorrent::RealQBitClient;
 use backend::config::Config;
+use backend::indexers::Prowlarr;
+use backend::torrent::QBit;
 
 #[tokio::main]
 async fn main() {
@@ -20,12 +20,12 @@ async fn main() {
     });
 
     let state = AppState {
-        prowlarr: Arc::new(RealProwlarrClient::new(
+        indexer: Arc::new(Prowlarr::new(
             &config.prowlarr_url,
             &config.prowlarr_api_key,
         )),
-        qbit: Arc::new(
-            RealQBitClient::new(
+        torrent: Arc::new(
+            QBit::new(
                 &config.qbit_url,
                 &config.qbit_username,
                 &config.qbit_password,

@@ -6,15 +6,13 @@ use http_body_util::BodyExt;
 use tower::ServiceExt;
 
 use backend::app::{AppState, build_router};
-use backend::clients::mock_prowlarr::MockProwlarrClient;
-use backend::clients::mock_qbittorrent::MockQBitClient;
-use backend::models::prowlarr::SearchResult;
-use backend::models::qbittorrent::TorrentInfo;
+use backend::indexers::{FakeIndexer, SearchResult};
+use backend::torrent::{FakeTorrentClient, TorrentInfo};
 
 fn test_state() -> AppState {
     AppState {
-        prowlarr: Arc::new(MockProwlarrClient),
-        qbit: Arc::new(MockQBitClient),
+        indexer: Arc::new(FakeIndexer),
+        torrent: Arc::new(FakeTorrentClient),
     }
 }
 

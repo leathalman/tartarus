@@ -1,4 +1,15 @@
+mod fake;
+mod prowlarr;
+
+pub use fake::FakeIndexer;
+pub use prowlarr::Prowlarr;
+
+use std::future::Future;
+use std::pin::Pin;
+
 use serde::{Deserialize, Serialize};
+
+use crate::error::AppError;
 
 /// Query parameters for the search endpoint.
 #[derive(Debug, Deserialize)]
@@ -27,4 +38,12 @@ pub struct SearchResult {
 pub struct Category {
     pub id: i32,
     pub name: Option<String>,
+}
+
+pub trait Indexer: Send + Sync {
+    fn search(
+        &self,
+        query: &str,
+        categories: Option<&str>,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<SearchResult>, AppError>> + Send + '_>>;
 }

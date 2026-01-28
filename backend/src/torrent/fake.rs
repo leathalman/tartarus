@@ -1,13 +1,12 @@
 use std::future::Future;
 use std::pin::Pin;
 
-use crate::clients::QBitClient;
+use super::{TorrentClient, TorrentInfo};
 use crate::error::AppError;
-use crate::models::qbittorrent::TorrentInfo;
 
-pub struct MockQBitClient;
+pub struct FakeTorrentClient;
 
-impl MockQBitClient {
+impl FakeTorrentClient {
     fn mock_torrent() -> TorrentInfo {
         TorrentInfo {
             hash: "abcdef1234567890".to_string(),
@@ -25,7 +24,7 @@ impl MockQBitClient {
     }
 }
 
-impl QBitClient for MockQBitClient {
+impl TorrentClient for FakeTorrentClient {
     fn add_torrent(
         &self,
         _urls: &str,

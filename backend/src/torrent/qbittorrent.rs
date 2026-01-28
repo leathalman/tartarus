@@ -4,16 +4,15 @@ use std::sync::Arc;
 
 use reqwest::Client;
 
-use crate::clients::QBitClient;
+use super::{TorrentClient, TorrentInfo};
 use crate::error::AppError;
-use crate::models::qbittorrent::TorrentInfo;
 
-pub struct RealQBitClient {
+pub struct QBit {
     client: Client,
     base_url: String,
 }
 
-impl RealQBitClient {
+impl QBit {
     pub async fn new(base_url: &str, username: &str, password: &str) -> Self {
         let jar = Arc::new(reqwest::cookie::Jar::default());
         let base_url = base_url.trim_end_matches('/').to_string();
@@ -43,7 +42,7 @@ impl RealQBitClient {
     }
 }
 
-impl QBitClient for RealQBitClient {
+impl TorrentClient for QBit {
     fn add_torrent(
         &self,
         urls: &str,

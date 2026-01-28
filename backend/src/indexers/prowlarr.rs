@@ -3,17 +3,16 @@ use std::pin::Pin;
 
 use reqwest::Client;
 
-use crate::clients::ProwlarrClient;
+use super::{Indexer, SearchResult};
 use crate::error::AppError;
-use crate::models::prowlarr::SearchResult;
 
-pub struct RealProwlarrClient {
+pub struct Prowlarr {
     client: Client,
     base_url: String,
     api_key: String,
 }
 
-impl RealProwlarrClient {
+impl Prowlarr {
     pub fn new(base_url: &str, api_key: &str) -> Self {
         Self {
             client: Client::new(),
@@ -23,7 +22,7 @@ impl RealProwlarrClient {
     }
 }
 
-impl ProwlarrClient for RealProwlarrClient {
+impl Indexer for Prowlarr {
     fn search(
         &self,
         query: &str,

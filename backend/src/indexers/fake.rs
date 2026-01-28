@@ -1,13 +1,12 @@
 use std::future::Future;
 use std::pin::Pin;
 
-use crate::clients::ProwlarrClient;
+use super::{Category, Indexer, SearchResult};
 use crate::error::AppError;
-use crate::models::prowlarr::{Category, SearchResult};
 
-pub struct MockProwlarrClient;
+pub struct FakeIndexer;
 
-impl ProwlarrClient for MockProwlarrClient {
+impl Indexer for FakeIndexer {
     fn search(
         &self,
         query: &str,
