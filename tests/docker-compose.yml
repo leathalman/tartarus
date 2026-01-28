@@ -37,17 +37,39 @@ services:
       timeout: 5s
       retries: 5
 
-  driver:
-    image: alpine/curl:latest
-    container_name: tartarus-driver
+  tartarus:
+    build:
+      context: ../backend
+    container_name: tartarus-backend
+    environment:
+      - PROWLARR_URL=http://prowlarr:9696
+      - PROWLARR_API_KEY=tartarus-test-api-key
+      - QBIT_URL=http://qbittorrent:8080
+      - QBIT_USERNAME=admin
+      - QBIT_PASSWORD=adminadmin
+      - PORT=3001
+    ports:
+      - "3001:3001"
     depends_on:
       prowlarr:
         condition: service_healthy
       qbittorrent:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/api/torrents"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  driver:
+    image: alpine:latest
+    container_name: tartarus-driver
+    depends_on:
+      tartarus:
+        condition: service_healthy
     volumes:
       - .:/tests
-    entrypoint: ["sh", "/tests/driver.sh"]
+    entrypoint: ["sh", "-c", "apk add --no-cache curl jq && sh /tests/driver.sh"]
 
 volumes:
   downloads:
