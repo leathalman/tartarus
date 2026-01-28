@@ -32,10 +32,7 @@ impl QBit {
             .expect("Failed to connect to qBittorrent");
 
         if !resp.status().is_success() {
-            panic!(
-                "qBittorrent auth failed with status {}",
-                resp.status()
-            );
+            panic!("qBittorrent auth failed with status {}", resp.status());
         }
 
         Self { client, base_url }
@@ -121,9 +118,10 @@ impl TorrentClient for QBit {
                 .json()
                 .await?;
 
-            torrents.into_iter().next().ok_or_else(|| {
-                AppError::NotFound(format!("No torrent with hash {hash}"))
-            })
+            torrents
+                .into_iter()
+                .next()
+                .ok_or_else(|| AppError::NotFound(format!("No torrent with hash {hash}")))
         })
     }
 }

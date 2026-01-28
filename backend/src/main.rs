@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use backend::app::{AppState, build_router};
 use backend::config::Config;
-use backend::indexers::Prowlarr;
+use backend::indexer::Prowlarr;
 use backend::torrent::QBit;
 
 #[tokio::main]
